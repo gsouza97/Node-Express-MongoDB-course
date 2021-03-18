@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const placesRoutes = require("./routes/places-routes"); //Importando a rota places
+const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 
 const app = express();
@@ -12,6 +13,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api/places", placesRoutes); //Essa rota passa a ser um middleware => /api/places/...
+
+app.use("/api/users", usersRoutes); //Essa rota passa a ser um middleware => /api/users/...
 
 // Erro padrão para rotas não suportadas
 // Essa middleware só é acessível se não obtivermos uma resposta (next)
