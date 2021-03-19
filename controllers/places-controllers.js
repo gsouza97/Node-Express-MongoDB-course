@@ -1,5 +1,7 @@
 const uuid = require("uuid").v4;
 
+const { validationResult } = require("express-validator");
+
 const HttpError = require("../models/http-error");
 
 let DUMMY_PLACES = [
@@ -52,6 +54,14 @@ const getPlacesByUserId = (req, res, next) => {
 // Entre {} é os campos que se espera receber do request
 // É igual a const title = req.body.title; const description = req.body.description ...
 const createPlace = (req, res, next) => {
+  const errors = validationResult(req); // Verifica se há algum erro de validação
+  // Se houver erro, retorna esse erro
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
   const { title, description, coordinates, address, creator } = req.body;
   const createdPlace = {
     id: uuid(), //Cria/gera um unico id
@@ -70,6 +80,15 @@ const createPlace = (req, res, next) => {
 };
 
 const updatePlace = (req, res, next) => {
+  const errors = validationResult(req); // Verifica se há algum erro de validação na requisição
+
+  if (!errors.isEmpty()) {
+    // Se houver erro, retorna esse erro
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
   const { title, description } = req.body;
   const placeId = req.params.pid;
   //Pega o parâmetro que foi passado e vê se ele existe
@@ -89,6 +108,10 @@ const updatePlace = (req, res, next) => {
 
 const deletePlace = (req, res, next) => {
   const placeId = req.params.pid;
+  // Mostra o erro se o lugar não existir
+  if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
+    return next(new HttpError("Could not find a place for that id.", 404));
+  }
   DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
   res.status(200).json({ message: "Deleted place." });
 };
