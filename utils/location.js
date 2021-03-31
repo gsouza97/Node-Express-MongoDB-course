@@ -1,7 +1,7 @@
 const axios = require("axios"); // Import para enviar requisições HTTP
 const HttpError = require("../models/http-error");
 
-const API_KEY = "AIzaSyBY4Nj0SOYV_qcxSNg3rs01L-dqQfWoJ18"; // Chave da API
+const API_KEY = "***********"; // Chave da API
 
 // Função para pegar a coordenada através do address passado.
 // O address é passado como parametro, em seguida é feita uma requisição para o google maps API passando o address
