@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes"); //Importando a rota places
 const usersRoutes = require("./routes/users-routes");
@@ -33,4 +34,15 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unkown error occurred." }); // Manda a mensagem do erro ou a mensagem padrão
 });
 
-app.listen(3000);
+// Estabelecer conexão com o banco de dados
+// Se a conexão for bem sucedida, escuta a porta 3000
+mongoose
+  .connect(
+    "mongodb+srv://gabriel:backendtest@cluster0.axkfi.mongodb.net/places?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
